@@ -1,0 +1,5 @@
+example/example.csv
+example/frames/*.png
+venv
+.DS_Store
+__pycache__
