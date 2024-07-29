@@ -8,7 +8,8 @@ from utils import extract_text_from_frames
 
 def main(video_path):
     video_file = Path(video_path)
-    output_text_file = video_file.with_suffix('.txt')
+    output_raw_text_file = video_file.with_suffix('.raw.txt')
+    output_cleaned_text_file = video_file.with_suffix('.txt')
     output_csv_file = video_file.with_suffix('.csv')
 
     # Get the API key from environment variable
@@ -26,12 +27,16 @@ def main(video_path):
     # Extract text from frames
     raw_text = extract_text_from_frames(frames)
 
+    # Save the raw text to a text file
+    with open(output_raw_text_file, 'w', encoding='utf-8') as raw_text_file:
+        raw_text_file.write(raw_text)
+
     # Clean the text using ChatGPT
     cleaned_text = clean_text_with_chatgpt(raw_text, api_key)
 
     # Save the cleaned text to a text file
-    with open(output_text_file, 'w', encoding='utf-8') as text_file:
-        text_file.write(cleaned_text)
+    with open(output_cleaned_text_file, 'w', encoding='utf-8') as cleaned_text_file:
+        cleaned_text_file.write(cleaned_text)
 
     # Extract words suitable for English learners of B1 and higher levels
     words = extract_b1_words(cleaned_text, api_key)
@@ -39,7 +44,8 @@ def main(video_path):
     # Save words to a CSV file
     save_words_to_csv(words, output_csv_file)
 
-    print(f"Cleaned text has been saved to {output_text_file}")
+    print(f"Raw text has been saved to {output_raw_text_file}")
+    print(f"Cleaned text has been saved to {output_cleaned_text_file}")
     print(f"Words have been saved to {output_csv_file}")
 
 if __name__ == "__main__":
