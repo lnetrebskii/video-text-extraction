@@ -23,6 +23,10 @@ def main(video_path, api_key):
     # Clean the text using ChatGPT
     cleaned_text = clean_text_with_chatgpt(raw_text, api_key)
 
+    # Save the cleaned text to a text file
+    with open(output_text_file, 'w', encoding='utf-8') as text_file:
+        text_file.write(cleaned_text)
+
     # Extract words suitable for English learners of B1 and higher levels
     words = extract_b1_words(cleaned_text, api_key)
 
