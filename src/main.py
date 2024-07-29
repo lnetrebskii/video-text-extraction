@@ -1,14 +1,20 @@
 import argparse
+import os
 from pathlib import Path
 from capture_frames import capture_frames
 from clean_text import clean_text_with_chatgpt
 from extract_words import extract_b1_words, save_words_to_csv
 from utils import extract_text_from_frames
 
-def main(video_path, api_key):
+def main(video_path):
     video_file = Path(video_path)
     output_text_file = video_file.with_suffix('.txt')
     output_csv_file = video_file.with_suffix('.csv')
+
+    # Get the API key from environment variable
+    api_key = os.getenv('OPENAI_API_KEY')
+    if not api_key:
+        raise ValueError("API key not found. Please set the 'OPENAI_API_KEY' environment variable.")
 
     # Create a directory to save the frames
     frames_dir = video_file.parent / 'frames'
@@ -33,13 +39,12 @@ def main(video_path, api_key):
     # Save words to a CSV file
     save_words_to_csv(words, output_csv_file)
 
-    print(f"Text has been saved to {output_text_file}")
+    print(f"Cleaned text has been saved to {output_text_file}")
     print(f"Words have been saved to {output_csv_file}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Process video to extract text and words for English learners.")
     parser.add_argument("--video", type=str, required=True, help="Path to the video file")
-    parser.add_argument("--apikey", type=str, required=True, help="OpenAI API key")
     args = parser.parse_args()
 
-    main(args.video, args.apikey)
+    main(args.video)
