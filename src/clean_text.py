@@ -11,7 +11,7 @@ def clean_text_with_chatgpt(text, api_key):
             {"role": "system", "content": "You are a helpful assistant."},
             {"role": "user", "content": f"Clean the following text by removing duplicates and noise:\n\n{text}"}
         ],
-        max_tokens=2048,
+        max_tokens=20480,
         n=1,
         stop=None,
         temperature=0.5
